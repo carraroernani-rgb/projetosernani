@@ -1,6 +1,10 @@
 """Interface Streamlit: Prospeccao B2B - Jardins Verticais (Karyn Carraro)."""
 from __future__ import annotations
 
+import subprocess
+import sys
+from pathlib import Path
+
 import streamlit as st
 
 from app.database import get_conn, upsert_prospect, fetch_filtered
@@ -8,6 +12,28 @@ from app.exporter import rows_to_dataframe, to_csv_bytes, to_xlsx_bytes
 from app.scraper import buscar_perfis, montar_prospect
 
 st.set_page_config(page_title="Prospeccao Jardins Verticais", page_icon="🌿", layout="wide")
+
+
+@st.cache_resource
+def garantir_chromium_instalado() -> None:
+    """Instala o navegador Chromium do Playwright na primeira execucao do app.
+
+    Necessario em ambientes de deploy (ex.: Streamlit Community Cloud) onde
+    o `playwright install` do build normal nao roda automaticamente.
+    """
+    marcador = Path.home() / ".cache" / "ms-playwright" / ".chromium_ok"
+    if marcador.exists():
+        return
+    with st.spinner("Preparando navegador para extracao (primeira execucao pode demorar)..."):
+        subprocess.run(
+            [sys.executable, "-m", "playwright", "install", "chromium"],
+            check=True,
+        )
+    marcador.parent.mkdir(parents=True, exist_ok=True)
+    marcador.touch()
+
+
+garantir_chromium_instalado()
 
 CATEGORIAS = [
     "Paisagista",
