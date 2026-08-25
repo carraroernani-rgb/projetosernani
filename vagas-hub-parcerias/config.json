@@ -1,0 +1,47 @@
+{
+  "cargos_alvo": [
+    "gerente de parcerias",
+    "analista de canais",
+    "analista de parcerias",
+    "coordenador de parcerias",
+    "diretor de parcerias",
+    "channel manager",
+    "partnerships manager",
+    "channel partner manager"
+  ],
+  "cidades_foco": [
+    "São Paulo",
+    "Curitiba",
+    "Rio de Janeiro",
+    "Belo Horizonte",
+    "Remoto",
+    "Brasil"
+  ],
+  "greenhouse_boards": [
+    "hubspot",
+    "zendesk",
+    "asana",
+    "notion",
+    "airtable",
+    "docusign"
+  ],
+  "lever_boards": [
+    "loggi",
+    "quintoandar",
+    "nubank"
+  ],
+  "termos_excluir": [
+    "estágio",
+    "estagiário",
+    "trainee",
+    "jovem aprendiz"
+  ],
+  "fontes_busca_br": [
+    "vagas.com.br",
+    "br.indeed.com",
+    "catho.com.br",
+    "jobleads.com",
+    "idealist.org",
+    "infojobs.com.br"
+  ]
+}
