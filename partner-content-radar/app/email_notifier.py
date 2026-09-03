@@ -45,14 +45,17 @@ HTML_TEMPLATE = """\
 """
 
 
-def send_article_email(article: Article) -> None:
+def send_article_email(article: Article) -> bool:
+    """Envia o e-mail de notificação. Retorna True se enviado, False se pulado
+    (SMTP não configurado) — o chamador usa o retorno para decidir se marca
+    `article.email_sent`."""
     if not SMTP_USER or not SMTP_PASSWORD:
         logger.warning(
             "SMTP_USER/SMTP_PASSWORD não configurados — pulando envio de e-mail "
             "para o artigo '%s'.",
             article.title_pt,
         )
-        return
+        return False
 
     has_ai_content = bool(article.summary_pt or article.checklist_md)
     if has_ai_content:
@@ -92,3 +95,4 @@ def send_article_email(article: Article) -> None:
         server.sendmail(EMAIL_FROM, [EMAIL_TO], msg.as_string())
 
     logger.info("E-mail enviado para %s sobre o artigo '%s'.", EMAIL_TO, article.title_pt)
+    return True

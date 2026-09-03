@@ -102,8 +102,7 @@ def _scan_competitor(
         session.refresh(article)
 
         try:
-            send_article_email(article)
-            article.email_sent = True
+            article.email_sent = send_article_email(article)
             session.add(article)
             session.commit()
         except Exception:
