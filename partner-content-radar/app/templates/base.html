@@ -18,6 +18,11 @@
             Rodar varredura agora
           </button>
         </form>
+        <form action="/rodar-backfill" method="post" onsubmit="return confirm('Isso busca posts dos últimos 300 dias e pode demorar alguns minutos. Continuar?');">
+          <button class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium px-3 py-1.5 rounded">
+            Buscar histórico (300 dias)
+          </button>
+        </form>
       </div>
     </div>
   </nav>

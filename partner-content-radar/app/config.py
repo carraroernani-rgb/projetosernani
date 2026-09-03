@@ -16,15 +16,26 @@ EMAIL_TO = os.getenv("EMAIL_TO", "carraro.ernani@gmail.com")
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/radar.db")
 
+# Quantos dias para trás considerar na varredura de backfill inicial
+# (scripts/backfill.py), para popular o portal com histórico ao configurar
+# o projeto pela primeira vez.
+BACKFILL_DAYS = int(os.getenv("BACKFILL_DAYS", "300"))
+
 # Concorrentes monitorados: nome de exibição, fonte RSS (quando existir) e URL de fallback
 # para scraping de HTML. Ajuste os seletores em scraper.py se o layout do site mudar.
 COMPETITORS = [
     {
         "slug": "partnerstack",
         "name": "PartnerStack",
-        "rss": "https://partnerstack.com/resources/articles/rss.xml",
+        # Site em Webflow com listagem renderizada via JS — RSS não existe e
+        # o HTML estático da listagem não traz os links dos posts. O
+        # sitemap.xml lista as URLs reais dos conteúdos de "guides"
+        # (equivalente aos artigos do blog).
+        "rss": None,
+        "sitemap_url": "https://partnerstack.com/sitemap.xml",
+        "url_pattern": "/resources/guides/",
         "listing_url": "https://partnerstack.com/resources/articles",
-        "link_selector": "a[href*='/resources/articles/']",
+        "link_selector": "a[href*='/resources/guides/']",
     },
     {
         "slug": "impartner",

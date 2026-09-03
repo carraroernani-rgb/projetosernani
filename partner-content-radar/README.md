@@ -94,6 +94,27 @@ página para disparar manualmente a qualquer momento.
 python scripts/run_scan.py
 ```
 
+## Backfill histórico (últimos 300 dias)
+Para popular o portal com conteúdo já existente na primeira configuração
+(em vez de só posts novos daqui pra frente), rode o backfill — ele percorre
+várias páginas de listagem de cada concorrente (quando não há RSS) e ignora
+posts mais antigos que a janela definida:
+```bash
+python scripts/backfill.py
+# ou com parâmetros customizados:
+python scripts/backfill.py --days 300 --pages 25 --max-per-competitor 100
+```
+Também dá para disparar pelo botão **"Buscar histórico (300 dias)"** no
+topo do portal web (pode demorar alguns minutos, pois percorre várias
+páginas por concorrente). O período padrão é 300 dias, configurável via
+`BACKFILL_DAYS` no `.env`.
+
+> Observação: o filtro por data só é aplicado quando a data de publicação é
+> conhecida (normalmente via RSS). Quando o concorrente não tem RSS e o
+> sistema cai no fallback de scraping HTML, a data de cada post não é
+> conhecida antecipadamente — nesse caso todos os posts encontrados nas
+> páginas percorridas são processados, independente da idade.
+
 ## Automação sem manter o servidor ligado (recomendado para produção)
 Como o agendador interno só funciona com o `uvicorn` rodando continuamente,
 para automação real escolha uma das opções:

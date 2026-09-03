@@ -18,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select
 
-from app.config import COMPETITORS
+from app.config import BACKFILL_DAYS, COMPETITORS
 from app.db import engine, init_db
 from app.models import Article
 from app.pipeline import run_scan
@@ -112,6 +112,17 @@ def article_detail(request: Request, article_id: int):
 
 @app.post("/rodar-varredura")
 def trigger_scan():
-    """Dispara a varredura manualmente a partir do portal web."""
+    """Dispara a varredura manualmente (só posts recentes) a partir do portal web."""
     run_scan()
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.post("/rodar-backfill")
+def trigger_backfill():
+    """
+    Dispara o backfill histórico (últimos BACKFILL_DAYS dias, com paginação
+    da listagem HTML) a partir do portal web. Pode demorar mais que a
+    varredura normal, pois percorre várias páginas por concorrente.
+    """
+    run_scan(max_new_posts_per_competitor=100, since_days=BACKFILL_DAYS, listing_pages=25)
     return RedirectResponse(url="/", status_code=303)
