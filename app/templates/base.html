@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Radar de Conteúdo de Concorrentes{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <nav class="bg-gray-900 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="font-semibold">📡 Radar de Conteúdo — Concorrentes</a>
+      <div class="flex gap-4 text-sm items-center">
+        <a href="/" class="hover:text-gray-300">Artigos</a>
+        <a href="/checklists" class="hover:text-gray-300">Checklists Práticos</a>
+        <form action="/rodar-varredura" method="post">
+          <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-3 py-1.5 rounded">
+            Rodar varredura agora
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

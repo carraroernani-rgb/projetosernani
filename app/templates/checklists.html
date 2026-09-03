@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-xl font-semibold mb-4">Checklists Práticos</h1>
+
+<form class="mb-6" method="get" action="/checklists">
+  <select name="competitor" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+    <option value="todos" {% if selected_competitor == "todos" %}selected{% endif %}>Todos os concorrentes</option>
+    {% for c in competitors %}
+    <option value="{{ c.slug }}" {% if selected_competitor == c.slug %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+{% if not articles %}
+<p class="text-gray-500 text-sm">Nenhum checklist disponível ainda.</p>
+{% endif %}
+
+<div class="grid gap-4">
+  {% for a in articles %}
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded">{{ a.competitor_name }}</span>
+      <a href="/artigo/{{ a.id }}" class="text-xs text-blue-600 hover:underline">Ver artigo completo →</a>
+    </div>
+    <h2 class="font-semibold mb-2">{{ a.title_pt }}</h2>
+    <pre class="whitespace-pre-wrap text-sm bg-gray-50 border border-gray-100 rounded p-3">{{ a.checklist_md }}</pre>
+    {% if a.tools_mentioned %}
+    <p class="text-xs text-gray-500 mt-2"><strong>Ferramentas citadas:</strong> {{ a.tools_mentioned }}</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

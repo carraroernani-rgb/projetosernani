@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not article %}
+<p class="text-gray-500 text-sm">Artigo não encontrado.</p>
+{% else %}
+<a href="/" class="text-sm text-blue-600 hover:underline">← Voltar</a>
+
+<div class="flex items-center justify-between mt-3 mb-1">
+  <span class="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded">{{ article.competitor_name }}</span>
+  <a href="{{ article.url }}" target="_blank" class="text-xs text-gray-500 hover:underline">Ver original →</a>
+</div>
+<h1 class="text-2xl font-bold mb-4">{{ article.title_pt }}</h1>
+
+<div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+  <h2 class="font-semibold mb-2 text-sm uppercase text-gray-500">Resumo acionável</h2>
+  <p class="text-sm">{{ article.summary_pt }}</p>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+  <h2 class="font-semibold mb-2 text-sm uppercase text-gray-500">Checklist / To-Do</h2>
+  <pre class="whitespace-pre-wrap text-sm">{{ article.checklist_md }}</pre>
+  {% if article.tools_mentioned %}
+  <p class="text-xs text-gray-500 mt-3"><strong>Ferramentas citadas:</strong> {{ article.tools_mentioned }}</p>
+  {% endif %}
+</div>
+
+<div class="bg-white border border-gray-200 rounded-lg p-4">
+  <h2 class="font-semibold mb-2 text-sm uppercase text-gray-500">Conteúdo traduzido na íntegra</h2>
+  <div class="whitespace-pre-wrap text-sm leading-relaxed">{{ article.content_pt }}</div>
+</div>
+{% endif %}
+{% endblock %}
