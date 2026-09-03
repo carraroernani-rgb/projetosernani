@@ -11,6 +11,7 @@
 </div>
 <h1 class="text-2xl font-bold mb-4">{{ article.title_pt }}</h1>
 
+{% if article.summary_pt or article.checklist_md %}
 <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
   <h2 class="font-semibold mb-2 text-sm uppercase text-gray-500">Resumo acionável</h2>
   <p class="text-sm">{{ article.summary_pt }}</p>
@@ -23,9 +24,16 @@
   <p class="text-xs text-gray-500 mt-3"><strong>Ferramentas citadas:</strong> {{ article.tools_mentioned }}</p>
   {% endif %}
 </div>
+{% else %}
+<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-xs text-yellow-800">
+  Tradução automática e checklist não configurados (ANTHROPIC_API_KEY ausente) — exibindo conteúdo original.
+</div>
+{% endif %}
 
 <div class="bg-white border border-gray-200 rounded-lg p-4">
-  <h2 class="font-semibold mb-2 text-sm uppercase text-gray-500">Conteúdo traduzido na íntegra</h2>
+  <h2 class="font-semibold mb-2 text-sm uppercase text-gray-500">
+    {% if article.summary_pt or article.checklist_md %}Conteúdo traduzido na íntegra{% else %}Conteúdo original{% endif %}
+  </h2>
   <div class="whitespace-pre-wrap text-sm leading-relaxed">{{ article.content_pt }}</div>
 </div>
 {% endif %}

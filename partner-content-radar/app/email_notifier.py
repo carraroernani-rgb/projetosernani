@@ -31,16 +31,9 @@ HTML_TEMPLATE = """\
         <strong>Fonte:</strong> <a href="{url}" style="color:#2563EB;">{url}</a>
       </p>
 
-      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Resumo acionável</h2>
-      <p style="font-size:14px;color:#374151;line-height:1.6;">{summary_pt}</p>
+      {extras_html}
 
-      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Checklist / To-Do extraído</h2>
-      <pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;color:#374151;background:#F9FAFB;padding:12px;border-radius:8px;">{checklist_md}</pre>
-
-      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Ferramentas citadas</h2>
-      <p style="font-size:14px;color:#374151;">{tools_mentioned}</p>
-
-      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Artigo traduzido na íntegra</h2>
+      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">{content_heading}</h2>
       <div style="font-size:14px;color:#374151;line-height:1.7;white-space:pre-wrap;">{content_pt}</div>
     </div>
     <div style="padding:16px 24px;background:#F9FAFB;font-size:12px;color:#9CA3AF;">
@@ -61,13 +54,29 @@ def send_article_email(article: Article) -> None:
         )
         return
 
+    has_ai_content = bool(article.summary_pt or article.checklist_md)
+    if has_ai_content:
+        extras_html = f"""
+      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Resumo acionável</h2>
+      <p style="font-size:14px;color:#374151;line-height:1.6;">{article.summary_pt or '—'}</p>
+
+      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Checklist / To-Do extraído</h2>
+      <pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;color:#374151;background:#F9FAFB;padding:12px;border-radius:8px;">{article.checklist_md or '—'}</pre>
+
+      <h2 style="font-size:15px;color:#111827;border-bottom:2px solid #F3F4F6;padding-bottom:6px;">Ferramentas citadas</h2>
+      <p style="font-size:14px;color:#374151;">{article.tools_mentioned or 'Nenhuma ferramenta citada.'}</p>
+"""
+        content_heading = "Artigo traduzido na íntegra"
+    else:
+        extras_html = ""
+        content_heading = "Artigo original (sem tradução automática configurada)"
+
     html_body = HTML_TEMPLATE.format(
         title_pt=article.title_pt,
         competitor_name=article.competitor_name,
         url=article.url,
-        summary_pt=article.summary_pt or "—",
-        checklist_md=article.checklist_md or "—",
-        tools_mentioned=article.tools_mentioned or "Nenhuma ferramenta citada.",
+        extras_html=extras_html,
+        content_heading=content_heading,
         content_pt=article.content_pt,
     )
 

@@ -7,6 +7,7 @@ e manter tradução e extração consistentes entre si.
 """
 import json
 import logging
+from typing import Optional
 
 from anthropic import Anthropic
 
@@ -14,7 +15,7 @@ from app.config import ANTHROPIC_API_KEY, CLAUDE_MODEL, PARTNERSHIP_GLOSSARY
 
 logger = logging.getLogger("translator")
 
-_client: Anthropic | None = None
+_client: Optional[Anthropic] = None
 
 
 def _get_client() -> Anthropic:

@@ -1,7 +1,9 @@
 """
 Pipeline de varredura: para cada concorrente, descobre posts novos,
-extrai o conteúdo completo, traduz + extrai checklist via IA, salva no banco
-e dispara o e-mail de notificação.
+extrai o conteúdo completo e, se houver ANTHROPIC_API_KEY configurada,
+traduz + extrai checklist via IA. Sem a chave configurada, o artigo é salvo
+e enviado por e-mail no idioma original (sem tradução/checklist). Em ambos
+os casos, salva no banco e dispara o e-mail de notificação.
 
 Usado tanto pelo agendador semanal (scripts/run_scan.py) quanto pelo botão
 "Rodar varredura agora" do portal web.
@@ -10,7 +12,7 @@ import logging
 
 from sqlmodel import Session, select
 
-from app.config import COMPETITORS
+from app.config import ANTHROPIC_API_KEY, COMPETITORS
 from app.db import engine
 from app.email_notifier import send_article_email
 from app.models import Article
@@ -81,7 +83,20 @@ def _process_post(competitor: dict, url: str, fallback_title: str) -> Article:
     title_original, content_original = fetch_full_article(url)
     title_original = title_original or fallback_title
 
-    ai_result = translate_and_extract(title_original, content_original, url)
+    if ANTHROPIC_API_KEY:
+        ai_result = translate_and_extract(title_original, content_original, url)
+    else:
+        logger.info(
+            "ANTHROPIC_API_KEY não configurada — salvando '%s' sem tradução/checklist.",
+            title_original,
+        )
+        ai_result = {
+            "title_pt": title_original,
+            "content_pt": content_original,
+            "summary_pt": "",
+            "checklist_md": "",
+            "tools_mentioned": "",
+        }
 
     return Article(
         competitor_slug=competitor["slug"],
