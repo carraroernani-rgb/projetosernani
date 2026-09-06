@@ -14,7 +14,12 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 EMAIL_FROM = os.getenv("EMAIL_FROM", "carraro.ernani@gmail.com")
 EMAIL_TO = os.getenv("EMAIL_TO", "carraro.ernani@gmail.com")
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/radar.db")
+# Caminho absoluto por padrão (não relativo ao cwd do processo) — em hosts
+# WSGI como o PythonAnywhere, o diretório de trabalho não é a raiz do
+# projeto, e "sqlite:///./data/radar.db" resolveria para o lugar errado.
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_DEFAULT_DB_PATH = os.path.join(_PROJECT_ROOT, "data", "radar.db")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{_DEFAULT_DB_PATH}")
 
 # Quantos dias para trás considerar na varredura de backfill inicial
 # (scripts/backfill.py), para popular o portal com histórico ao configurar

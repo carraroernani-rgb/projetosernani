@@ -30,7 +30,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger("main")
 
-templates = Jinja2Templates(directory="app/templates")
+# Caminhos absolutos (baseados na localização deste arquivo), não relativos
+# ao diretório de trabalho do processo — em alguns hosts WSGI (ex.:
+# PythonAnywhere), o cwd não é a raiz do projeto, e caminhos relativos como
+# "app/static" quebram com RuntimeError: Directory does not exist.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 scheduler = BackgroundScheduler()
 
 # Desative com ENABLE_INTERNAL_SCHEDULER=false quando a automação semanal já
@@ -59,7 +65,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Radar de Conteúdo de Concorrentes", lifespan=lifespan)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 
 @app.get("/")
