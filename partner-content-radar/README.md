@@ -133,7 +133,7 @@ agendada por dia** (não semanal). O projeto já vem preparado para isso:
    ```
 3. Crie o virtualenv e instale as dependências:
    ```bash
-   mkvirtualenv --python=/usr/bin/python3.11 radar-env
+   mkvirtualenv --python=/usr/bin/python3.10 radar-env
    pip install -r requirements.txt
    ```
 4. Crie o `.env` (aba Files, ou `nano .env`) com as mesmas variáveis do
@@ -144,7 +144,7 @@ agendada por dia** (não semanal). O projeto já vem preparado para isso:
    (evita rodar o agendador interno em paralelo com a tarefa agendada do
    passo 6, que já faz esse papel).
 5. **Crie o Web App**: aba **Web** → **Add a new web app** → **Manual
-   configuration** → Python 3.11. Depois:
+   configuration** → Python 3.10. Depois:
    - **Virtualenv**: aponte para `/home/SEU_USUARIO/.virtualenvs/radar-env`
    - **WSGI configuration file**: abra o arquivo gerado e substitua o
      conteúdo por:
@@ -161,7 +161,7 @@ agendada por dia** (não semanal). O projeto já vem preparado para isso:
 6. **Automação semanal**: aba **Tasks** → crie uma tarefa **diária** (o
    plano free não tem opção semanal) com o comando:
    ```bash
-   python3.11 /home/SEU_USUARIO/projetosernani/partner-content-radar/scripts/weekly_cron_pythonanywhere.py
+   python3.10 /home/SEU_USUARIO/projetosernani/partner-content-radar/scripts/weekly_cron_pythonanywhere.py
    ```
    Esse script roda todo dia mas só executa a varredura de verdade aos
    sábados (o dia é checado dentro do script) — na prática funciona como
