@@ -13,3 +13,4 @@ anthropic==0.34.2
 python-dotenv==1.0.1
 apscheduler==3.10.4
 python-multipart==0.0.9
+a2wsgi==1.10.7

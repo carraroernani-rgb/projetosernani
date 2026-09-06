@@ -8,6 +8,7 @@ automaticamente todo sábado — como alternativa ao cron externo em
 scripts/run_scan.py.
 """
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -32,21 +33,29 @@ logger = logging.getLogger("main")
 templates = Jinja2Templates(directory="app/templates")
 scheduler = BackgroundScheduler()
 
+# Desative com ENABLE_INTERNAL_SCHEDULER=false quando a automação semanal já
+# é feita por um cron/tarefa agendada externa (ex.: PythonAnywhere Scheduled
+# Tasks, GitHub Actions), para não rodar a varredura duas vezes. No Railway,
+# onde o processo web fica sempre ativo, deixe habilitado (padrão).
+ENABLE_INTERNAL_SCHEDULER = os.getenv("ENABLE_INTERNAL_SCHEDULER", "true").lower() == "true"
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
-    # Todo sábado às 08:00 (horário do servidor).
-    scheduler.add_job(
-        run_scan,
-        CronTrigger(day_of_week="sat", hour=8, minute=0),
-        id="weekly_scan",
-        replace_existing=True,
-    )
-    scheduler.start()
-    logger.info("Agendador iniciado: varredura semanal aos sábados às 08:00.")
+    if ENABLE_INTERNAL_SCHEDULER:
+        # Todo sábado às 08:00 (horário do servidor).
+        scheduler.add_job(
+            run_scan,
+            CronTrigger(day_of_week="sat", hour=8, minute=0),
+            id="weekly_scan",
+            replace_existing=True,
+        )
+        scheduler.start()
+        logger.info("Agendador iniciado: varredura semanal aos sábados às 08:00.")
     yield
-    scheduler.shutdown()
+    if ENABLE_INTERNAL_SCHEDULER:
+        scheduler.shutdown()
 
 
 app = FastAPI(title="Radar de Conteúdo de Concorrentes", lifespan=lifespan)

@@ -117,6 +117,63 @@ páginas por concorrente). O período padrão é 300 dias, configurável via
 > conhecida antecipadamente — nesse caso todos os posts encontrados nas
 > páginas percorridas são processados, independente da idade.
 
+## Hospedagem gratuita (PythonAnywhere) — recomendado se não quiser pagar
+O Railway só dá US$5 de crédito único (não é mensal) e esgota rápido. O
+[PythonAnywhere](https://www.pythonanywhere.com) tem um plano free real,
+sempre no ar (não "dorme"), com disco persistente — mas o plano gratuito só
+roda apps **WSGI** (não ASGI/uvicorn direto) e só permite **1 tarefa
+agendada por dia** (não semanal). O projeto já vem preparado para isso:
+
+1. **Crie a conta grátis**: [pythonanywhere.com](https://www.pythonanywhere.com)
+   → **Beginner account** (gratuito).
+2. Abra um **Bash console** (aba Consoles → Bash) e clone o repositório:
+   ```bash
+   git clone https://github.com/carraroernani-rgb/projetosernani.git
+   cd projetosernani/partner-content-radar
+   ```
+3. Crie o virtualenv e instale as dependências:
+   ```bash
+   mkvirtualenv --python=/usr/bin/python3.11 radar-env
+   pip install -r requirements.txt
+   ```
+4. Crie o `.env` (aba Files, ou `nano .env`) com as mesmas variáveis do
+   `.env.example` — **adicione também**:
+   ```
+   ENABLE_INTERNAL_SCHEDULER=false
+   ```
+   (evita rodar o agendador interno em paralelo com a tarefa agendada do
+   passo 6, que já faz esse papel).
+5. **Crie o Web App**: aba **Web** → **Add a new web app** → **Manual
+   configuration** → Python 3.11. Depois:
+   - **Virtualenv**: aponte para `/home/SEU_USUARIO/.virtualenvs/radar-env`
+   - **WSGI configuration file**: abra o arquivo gerado e substitua o
+     conteúdo por:
+     ```python
+     import sys
+     path = '/home/SEU_USUARIO/projetosernani/partner-content-radar'
+     if path not in sys.path:
+         sys.path.insert(0, path)
+
+     from app.wsgi import application
+     ```
+   - Clique em **Reload** no topo da aba Web. A URL fica em
+     `SEU_USUARIO.pythonanywhere.com`.
+6. **Automação semanal**: aba **Tasks** → crie uma tarefa **diária** (o
+   plano free não tem opção semanal) com o comando:
+   ```bash
+   python3.11 /home/SEU_USUARIO/projetosernani/partner-content-radar/scripts/weekly_cron_pythonanywhere.py
+   ```
+   Esse script roda todo dia mas só executa a varredura de verdade aos
+   sábados (o dia é checado dentro do script) — na prática funciona como
+   "toda semana, aos sábados".
+7. **Atualizações futuras**: diferente do Railway, o PythonAnywhere não
+   redeploya sozinho a cada `git push`. Sempre que eu enviar uma atualização
+   para o GitHub, você (ou eu, te avisando) precisa rodar no Bash console:
+   ```bash
+   cd ~/projetosernani && git pull && cd partner-content-radar && pip install -r requirements.txt
+   ```
+   e clicar em **Reload** na aba Web.
+
 ## Hospedagem permanente (Railway) — para não depender do seu computador
 Rodar em `localhost` significa que o portal só existe enquanto o `uvicorn`
 está rodando no seu Mac. Para ter um link fixo, sempre no ar, sem depender
