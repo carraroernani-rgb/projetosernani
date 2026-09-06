@@ -117,9 +117,54 @@ páginas por concorrente). O período padrão é 300 dias, configurável via
 > conhecida antecipadamente — nesse caso todos os posts encontrados nas
 > páginas percorridas são processados, independente da idade.
 
-## Hospedagem gratuita (PythonAnywhere) — recomendado se não quiser pagar
+## Hospedagem gratuita (Render) — recomendado
 O Railway só dá US$5 de crédito único (não é mensal) e esgota rápido. O
-[PythonAnywhere](https://www.pythonanywhere.com) tem um plano free real,
+[Render](https://render.com) tem um plano free real e roda a aplicação
+como ASGI de verdade (`uvicorn`, igual ao Railway) — sem nenhum adaptador
+WSGI, que é justamente o que causou os problemas descritos na seção do
+PythonAnywhere logo abaixo. Trade-off do plano free do Render: o serviço
+"dorme" após 15 min sem acesso (o primeiro clique depois disso demora uns
+20-30s para acordar) e o disco não é persistente entre deploys (o banco
+SQLite reseta a cada novo `git push` — aceitável para reprocessar via
+"Buscar histórico" depois de cada deploy, mas informe se quiser que eu
+troque para um banco externo persistente no futuro).
+
+1. **Crie a conta grátis**: [render.com](https://render.com) → **Get
+   Started** → login com GitHub (conta `carraroernani-rgb`).
+2. **New + → Web Service** → selecione o repositório `projetosernani`.
+3. Configure:
+   - **Root Directory**: `partner-content-radar`
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - **Instance Type**: Free
+4. Em **Environment**, adicione as variáveis do `.env` local (`SMTP_HOST`,
+   `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_TO`,
+   `BACKFILL_DAYS`; deixe `ANTHROPIC_API_KEY` vazio ou não crie, se não for
+   usar tradução).
+5. Clique em **Create Web Service**. Render builda e sobe automaticamente,
+   gerando uma URL fixa tipo `radar-concorrentes.onrender.com`.
+6. **Deploys automáticos**: todo `git push` para `main` já dispara um novo
+   deploy sozinho — inclusive as atualizações futuras que eu fizer.
+
+> O agendador interno (sábados às 08h) funciona normalmente aqui, já que é
+> um processo `uvicorn` de verdade rodando continuamente (enquanto não
+> estiver "dormindo" por inatividade).
+
+## Hospedagem no PythonAnywhere — não recomendado (problema conhecido)
+Este projeto foi testado no plano gratuito do PythonAnywhere e **travava
+de forma persistente** (uWSGI matando o worker via "harakiri" repetidas
+vezes, sem nunca responder). A causa raiz: o PythonAnywhere free só roda
+apps **WSGI** puros (Flask/Django clássico), e qualquer adaptador
+ASGI→WSGI para hospedar um app FastAPI ali esbarra em incompatibilidades
+de baixo nível entre `asyncio` e o gerenciamento de workers do uWSGI. Os
+passos abaixo ficam documentados por referência, mas **use o Render**
+(seção acima) em vez disso.
+
+<details>
+<summary>Passos testados (não recomendado — deu problema)</summary>
+
+O [PythonAnywhere](https://www.pythonanywhere.com) tem um plano free real,
 sempre no ar (não "dorme"), com disco persistente — mas o plano gratuito só
 roda apps **WSGI** (não ASGI/uvicorn direto) e só permite **1 tarefa
 agendada por dia** (não semanal). O projeto já vem preparado para isso:
@@ -173,6 +218,8 @@ agendada por dia** (não semanal). O projeto já vem preparado para isso:
    cd ~/projetosernani && git pull && cd partner-content-radar && pip install -r requirements.txt
    ```
    e clicar em **Reload** na aba Web.
+
+</details>
 
 ## Hospedagem permanente (Railway) — para não depender do seu computador
 Rodar em `localhost` significa que o portal só existe enquanto o `uvicorn`
