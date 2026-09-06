@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Radar de Conteúdo de Concorrentes{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Faz o link ocupar o card inteiro (técnica "stretched link"),
+       permitindo um segundo link menor (ex.: "Ver detalhes") no mesmo card. */
+    .stretched-link::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
   <nav class="bg-gray-900 text-white">

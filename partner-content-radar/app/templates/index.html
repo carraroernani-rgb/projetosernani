@@ -20,14 +20,17 @@
 
 <div class="grid gap-4">
   {% for a in articles %}
-  <a href="/artigo/{{ a.id }}" class="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition">
+  <div class="relative bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition">
     <div class="flex items-center justify-between mb-1">
       <span class="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded">{{ a.competitor_name }}</span>
       <span class="text-xs text-gray-400">{{ a.processed_at.strftime("%d/%m/%Y") }}</span>
     </div>
-    <h2 class="font-semibold text-lg mb-1">{{ a.title_pt }}</h2>
-    <p class="text-sm text-gray-600 line-clamp-2">{{ a.summary_pt }}</p>
-  </a>
+    <h2 class="font-semibold text-lg mb-1">
+      <a href="{{ a.url }}" target="_blank" rel="noopener" class="stretched-link">{{ a.title_pt }}</a>
+    </h2>
+    <p class="text-sm text-gray-600 line-clamp-2 mb-2">{{ a.summary_pt }}</p>
+    <a href="/artigo/{{ a.id }}" class="relative z-10 text-xs text-blue-600 hover:underline">Ver detalhes no portal →</a>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}
