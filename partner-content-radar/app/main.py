@@ -67,9 +67,16 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Radar de Conteúdo de Concorrentes", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
+# Chamado também aqui fora do lifespan: em hosts que servem a aplicação via
+# adaptador ASGI->WSGI (ex.: a2wsgi, usado no PythonAnywhere), o evento de
+# lifespan do ASGI nunca é disparado, então init_db() dentro de lifespan()
+# jamais rodaria e as tabelas do banco nunca seriam criadas. Chamar aqui
+# garante que o banco exista de qualquer forma (idempotente).
+init_db()
+
 
 @app.get("/")
-def home(request: Request, competitor: str = "todos", q: str = ""):
+async def home(request: Request, competitor: str = "todos", q: str = ""):
     with Session(engine) as session:
         statement = select(Article).order_by(Article.processed_at.desc())
         articles = session.exec(statement).all()
@@ -96,7 +103,7 @@ def home(request: Request, competitor: str = "todos", q: str = ""):
 
 
 @app.get("/checklists")
-def checklists(request: Request, competitor: str = "todos"):
+async def checklists(request: Request, competitor: str = "todos"):
     with Session(engine) as session:
         statement = select(Article).order_by(Article.processed_at.desc())
         articles = session.exec(statement).all()
@@ -117,7 +124,7 @@ def checklists(request: Request, competitor: str = "todos"):
 
 
 @app.get("/artigo/{article_id}")
-def article_detail(request: Request, article_id: int):
+async def article_detail(request: Request, article_id: int):
     with Session(engine) as session:
         article = session.get(Article, article_id)
     return templates.TemplateResponse(
