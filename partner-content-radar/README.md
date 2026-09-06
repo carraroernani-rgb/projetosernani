@@ -35,6 +35,8 @@ partner-content-radar/
 ├── .github/workflows/
 │   └── weekly-scan.yml      # Alternativa: rodar a varredura via GitHub Actions
 ├── requirements.txt
+├── Procfile                 # Comando de start para deploy (Railway/Heroku-like)
+├── railway.json              # Config de build/deploy do Railway
 ├── .env.example
 └── data/
     └── radar.db              # Banco SQLite (criado automaticamente)
@@ -114,6 +116,39 @@ páginas por concorrente). O período padrão é 300 dias, configurável via
 > sistema cai no fallback de scraping HTML, a data de cada post não é
 > conhecida antecipadamente — nesse caso todos os posts encontrados nas
 > páginas percorridas são processados, independente da idade.
+
+## Hospedagem permanente (Railway) — para não depender do seu computador
+Rodar em `localhost` significa que o portal só existe enquanto o `uvicorn`
+está rodando no seu Mac. Para ter um link fixo, sempre no ar, sem depender
+disso, use o [Railway](https://railway.app) (o repositório já vem
+preparado com `Procfile` e `railway.json`):
+
+1. **Crie a conta**: acesse [railway.app](https://railway.app) → faça login
+   com GitHub (usando a conta `carraroernani-rgb`).
+2. **Novo projeto**: **New Project → Deploy from GitHub repo** → selecione
+   `carraroernani-rgb/projetosernani`.
+3. **Root Directory**: nas configurações do serviço criado, defina o
+   **Root Directory** como `partner-content-radar` (o repositório tem outro
+   projeto na raiz).
+4. **Variáveis de ambiente**: em **Variables**, adicione as mesmas chaves do
+   `.env` local (`ANTHROPIC_API_KEY`, `CLAUDE_MODEL`, `SMTP_HOST`,
+   `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_TO`,
+   `BACKFILL_DAYS`) e defina `DATABASE_URL=sqlite:////data/radar.db`
+   (aponta para o volume persistente, veja o próximo passo).
+5. **Volume persistente** (essencial — sem isso o banco SQLite é apagado a
+   cada novo deploy): na aba **Volumes** do serviço, crie um volume e monte
+   em `/data`.
+6. O Railway detecta automaticamente o `Procfile`/`railway.json`, instala as
+   dependências e sobe o portal. Ele gera uma URL pública fixa (algo como
+   `seu-projeto.up.railway.app`) em **Settings → Networking → Generate
+   Domain**.
+7. **Deploys automáticos**: a partir daqui, todo `git push` para `main`
+   dispara um novo deploy automaticamente no Railway — inclusive as
+   atualizações futuras que eu fizer no código.
+
+> O agendador interno (sábados às 08h) já funciona normalmente assim que o
+> serviço fica no ar continuamente no Railway — não precisa do cron externo
+> nem do GitHub Actions nesse caso.
 
 ## Automação sem manter o servidor ligado (recomendado para produção)
 Como o agendador interno só funciona com o `uvicorn` rodando continuamente,
