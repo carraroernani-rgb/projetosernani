@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Junta output/raw_greenhouse.json e output/raw_br_boards.json, remove
-duplicatas por link e compara com output/vagas_historico.json para
-separar vagas novas desta semana das já vistas antes.
+Junta output/raw_greenhouse.json, output/raw_br_boards.json e (se
+existir) output/raw_linkedin_manual.json — vagas de LinkedIn coladas
+manualmente por Ernani, já que o robô não faz scraping de LinkedIn —
+remove duplicatas por link e compara com output/vagas_historico.json
+para separar vagas novas desta semana das já vistas antes.
 
 Uso:
     python3 dedupe_normalize.py
@@ -20,6 +22,7 @@ OUTPUT_DIR = BASE_DIR / "output"
 
 RAW_GREENHOUSE = OUTPUT_DIR / "raw_greenhouse.json"
 RAW_BR_BOARDS = OUTPUT_DIR / "raw_br_boards.json"
+RAW_LINKEDIN_MANUAL = OUTPUT_DIR / "raw_linkedin_manual.json"
 HISTORICO = OUTPUT_DIR / "vagas_historico.json"
 SEMANA = OUTPUT_DIR / "vagas_semana.json"
 
@@ -51,11 +54,12 @@ def main():
 
     greenhouse = load_json(RAW_GREENHOUSE, [])
     br_boards = load_json(RAW_BR_BOARDS, [])
+    linkedin_manual = load_json(RAW_LINKEDIN_MANUAL, [])
     historico = load_json(HISTORICO, [])
 
     historico_links = {v["link"] for v in historico if v.get("link")}
 
-    coletadas = [normalize(v, hoje) for v in greenhouse + br_boards]
+    coletadas = [normalize(v, hoje) for v in greenhouse + br_boards + linkedin_manual]
 
     vistas = set()
     unicas = []
