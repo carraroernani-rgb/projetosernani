@@ -1,62 +1,102 @@
 [
   {
-    "titulo": "Gerente de Parcerias e Alianças",
-    "empresa": "Seal Telecom (Convergint Technologies Company)",
-    "cidade": "São Paulo, SP",
-    "modalidade": "verificar",
-    "descricao": "Gestão de relacionamento com parceiros de negócio, com foco em fortalecer parcerias e alianças estratégicas para o crescimento da empresa.",
-    "link": "https://www.vagas.com.br/vagas/v2518894/gerente-de-parcerias-e-aliancas",
+    "titulo": "Coordenador(a) de Canal Indireto (Distribution Partner Manager)",
+    "empresa": "Red Bull",
+    "cidade": "Salvador, BA",
+    "modalidade": "",
+    "descricao": "Gestão da rede de revenda (Canal Indireto), com nível superior em Administração/Marketing e experiência em áreas comerciais. Publicada em 15/09/2026.",
+    "link": "https://vagasbr.empregonaweb.com/2026/09/15/coordenadora-de-canal-indireto-distribution-partner-manager-salvador-ba/",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-14"
+    "data_coleta": "2026-09-21"
+  },
+  {
+    "titulo": "Gerente de Canais",
+    "empresa": "Ricoh Latin America",
+    "cidade": "São Paulo, SP",
+    "modalidade": "",
+    "descricao": "Comercialização de produtos junto ao Canal Indireto (Rede de Revendas), com gerenciamento de parceiros comerciais da empresa. Candidaturas abertas até 04/10/2026.",
+    "link": "https://bebee.com/br/jobs/gerente-de-canais-ricoh-latin-america-inc-sao-paulo-sao-paulo--t7xk-789692450",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-21"
+  },
+  {
+    "titulo": "Channels and Alliances Manager - Brazil",
+    "empresa": "Elastic",
+    "cidade": "Brasil",
+    "modalidade": "",
+    "descricao": "Partner Manager para o time de Business Development, cobrindo parceiros do mercado brasileiro. Vaga publicada na página de carreiras da própria empresa.",
+    "link": "https://jobs.elastic.co/form?gh_jid=7230500",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-21"
+  },
+  {
+    "titulo": "Executivo de Alianças e Parcerias",
+    "empresa": "Experian",
+    "cidade": "São Paulo, SP",
+    "modalidade": "",
+    "descricao": "Liderança da estratégia de Alianças & Parcerias, com foco em gerar novos negócios e desenvolver parcerias estratégicas que impulsionem resultados.",
+    "link": "https://jobs.experian.com/job/executivo-de-aliancas-e-parcerias-in-sao-paulo-brazil-jid-4807",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-21"
   },
   {
     "titulo": "Coordenador de Parcerias",
-    "empresa": "não informado",
-    "cidade": "São Paulo, SP",
-    "modalidade": "verificar",
-    "descricao": "Coordenação de parcerias estratégicas, atuando na identificação e desenvolvimento de novos parceiros de negócio.",
-    "link": "https://www.jobleads.com/br/job/coordenador-de-parcerias-495532--sao-paulo--e2995a1d80544b8e91b8e722e1ff7b6b6",
+    "empresa": "Berry Consultoria Empresarial",
+    "cidade": "Curitiba, PR",
+    "modalidade": "",
+    "descricao": "Estruturar, desenvolver e coordenar a estratégia de parcerias da empresa: prospecção, negociação e desenvolvimento de parcerias estratégicas B2B e criação de programas de parceria.",
+    "link": "https://bebee.com/br/jobs/coordenador-de-parcerias-berry-consultoria-empresarial-curitiba--fj-2292893386",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-14"
+    "data_coleta": "2026-09-21"
   },
   {
-    "titulo": "Coordenador de Parcerias",
-    "empresa": "não informado",
+    "titulo": "Analista de Parcerias Estratégicas",
+    "empresa": "ETALENT",
     "cidade": "não informado",
-    "modalidade": "verificar",
-    "descricao": "Responsável pelo ciclo completo de gestão de parcerias, incluindo identificação ativa de parceiros e acompanhamento de campanhas de performance.",
-    "link": "https://www.jobijoba.com.br/detail/97/5082cde477b5f74a0a029b495059ac90",
+    "modalidade": "",
+    "descricao": "Atuação em parcerias estratégicas, apoiando negociação e gestão de relacionamento com parceiros de negócio.",
+    "link": "https://www.empregare.com/pt-br/vaga-analista-de-parcerias-estrategicas_68244",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-14"
+    "data_coleta": "2026-09-21"
   },
   {
-    "titulo": "Analista de Parcerias",
-    "empresa": "não informado",
-    "cidade": "Rio de Janeiro, RJ",
-    "modalidade": "verificar",
-    "descricao": "Atuação no suporte e desenvolvimento de parcerias comerciais, com foco em relacionamento e geração de novas oportunidades de negócio.",
-    "link": "https://www.jobijoba.com.br/detail/97/1e91628e2a72d6fc44e0aeaf93268ad8",
-    "fonte": "busca_br",
-    "data_coleta": "2026-09-14"
-  },
-  {
-    "titulo": "Analista de Parcerias Sr",
+    "titulo": "Analista de Canais",
     "empresa": "não informado",
     "cidade": "São Paulo, SP",
-    "modalidade": "verificar",
-    "descricao": "Posição sênior com atuação em parcerias estratégicas, incluindo pacote de benefícios e responsabilidade por negociação e gestão de contratos com parceiros.",
-    "link": "https://www.jobijoba.com.br/detail/97/e46afa790ff38d02c3eddb7682002b70",
+    "modalidade": "",
+    "descricao": "Gestão e desenvolvimento de canais de venda e parcerias estratégicas, acompanhando o processo comercial de parceiros via CRM.",
+    "link": "https://www.jobleads.com/br/job/analista-de-canais--sao-paulo--e914c2fc01797e6f547ec6da5d5a47fad",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-14"
+    "data_coleta": "2026-09-21"
   },
   {
-    "titulo": "Coordenação de Vendas e Parcerias Corporativas",
-    "empresa": "Teto Brasil",
+    "titulo": "Channel Manager - Brazil",
+    "empresa": "não informado",
     "cidade": "São Paulo, SP",
-    "modalidade": "verificar",
-    "descricao": "Vaga afirmativa exclusiva para pessoas negras, com foco em coordenar vendas e parcerias corporativas de uma organização sem fins lucrativos.",
-    "link": "https://www.idealist.org/en/nonprofit-job/2dcb78952f294fe6b59d0066d4edcb0b-coordenacao-de-vendas-e-parcerias-corporativas-vaga-afirmativa-exclusiva-para-pessoas-negras-teto-brasil-sao-paulo",
+    "modalidade": "",
+    "descricao": "Definição e execução da estratégia de parceiros de canal no mercado brasileiro, incluindo recrutamento e desenvolvimento de parceiros de negócio.",
+    "link": "https://www.jobleads.com/br/job/channel-manager-brazil--sao-paulo--e239a5cfe28f719e5e78f47162c2dc2fe",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-14"
+    "data_coleta": "2026-09-21"
+  },
+  {
+    "titulo": "Alliances Manager",
+    "empresa": "não informado",
+    "cidade": "São Paulo, SP",
+    "modalidade": "",
+    "descricao": "Gestão de alianças estratégicas, atuando na estruturação e expansão de parcerias de negócio.",
+    "link": "https://www.jobleads.com/br/job/alliances-manager--sao-paulo--e3b4e2fa0d97592030605e021094161d5",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-21"
+  },
+  {
+    "titulo": "Gerente de Estratégia de Canal & Growth (foco canal especializado)",
+    "empresa": "não informado",
+    "cidade": "São Paulo, SP",
+    "modalidade": "",
+    "descricao": "Liderança de equipes comerciais com foco em estratégia de canal especializado e crescimento (growth) do canal indireto.",
+    "link": "https://www.agrobase.com.br/oportunidades/2026/09/gerente-de-estrategia-de-canal-growth-foco-canal-especializado-sao-paulo-sp/",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-21"
   }
 ]
