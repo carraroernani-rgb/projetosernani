@@ -1,52 +1,62 @@
 [
   {
-    "titulo": "Executivo(a) de Parcerias Sênior",
-    "empresa": "Sem Parar",
+    "titulo": "[CS] Analista de Parcerias I | Varejo e Distribuição",
+    "empresa": "TOTVS",
     "cidade": "São Paulo, SP",
-    "modalidade": "Híbrido",
-    "descricao": "Geração de resultados comerciais por meio da gestão estratégica de parceiros. Requer experiência em vendas B2B e habilidades de prospecção e gestão de portfólio.",
-    "link": "https://www.jobleads.com/br/job/executivo-a-de-parcerias-senior-beneficios-sao-paulo-sp-and-hybrid-full-time-employee--sao-paulo--e589d2553f3883b42aaffeacbdeedc78f",
-    "fonte": "busca_br",
-    "data_coleta": "2026-09-23"
-  },
-  {
-    "titulo": "Analista de Negócios (Gestão de Parcerias) - Sênior",
-    "empresa": "Montreal",
-    "cidade": "Belo Horizonte, MG",
     "modalidade": "",
-    "descricao": "Atuação sênior em análise de negócios com foco em gestão de parcerias estratégicas.",
-    "link": "https://vagasbr.empregonaweb.com/2026/09/10/analista-de-negocios-gestao-parcerias-senior-minas-gerais-mg/",
+    "descricao": "Analista de parcerias na área de Customer Success da TOTVS, com atuação focada nos segmentos de Varejo e Distribuição.",
+    "link": "https://atracaodetalentos.totvs.app/vempratotvs/12126/cs-analista-de-parcerias-i-varejo-e-distribuicao",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-23"
+    "data_coleta": "2026-09-29"
   },
   {
-    "titulo": "Executivo de Canais e Parcerias",
-    "empresa": "BIZ - Tecnologia em Meios de Pagamento",
-    "cidade": "não informado",
+    "titulo": "Gerente Executivo de Alianças e Parcerias",
+    "empresa": "Experian",
+    "cidade": "São Paulo, SP",
     "modalidade": "",
-    "descricao": "Geração de vendas no mercado de benefícios (vale refeição, alimentação, combustível, transporte), atuando tanto com parceiros já ativos quanto com novos indicadores estratégicos.",
-    "link": "https://biz.vagas.solides.com.br/vaga/649815",
+    "descricao": "Liderança executiva da estratégia de Alianças & Parcerias da Experian, área estratégica voltada à criação de novos negócios por meio de conexões com outras empresas.",
+    "link": "https://jobs.experian.com/job/gerente-executivo-de-aliancas-e-parcerias-in-sao-paulo-brazil-jid-4374",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-23"
+    "data_coleta": "2026-09-29"
   },
   {
-    "titulo": "Key Account Senior (Canais & Strategic Partnerships)",
+    "titulo": "Gerente de Canais e Distribuição",
     "empresa": "não divulgada",
-    "cidade": "não informado",
+    "cidade": "São Paulo, SP",
     "modalidade": "",
-    "descricao": "Fortalecimento de relacionamentos executivos com parceiros estratégicos, identificação de oportunidades de crescimento e evolução comercial da parceria.",
-    "link": "https://br.jooble.org/jdp/-9061645222340226280",
+    "descricao": "Gestão de canais e distribuição, com desenvolvimento e acompanhamento da rede de parceiros comerciais.",
+    "link": "https://www.vagas.com.br/vagas/v2120919/gerente-de-canais-e-distribuicao",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-23"
+    "data_coleta": "2026-09-29"
   },
   {
-    "titulo": "Pessoa Executiva de Canais Pl",
-    "empresa": "Goomer",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Expansão da rede de parceiros e fortalecimento do ecossistema que a Goomer constrói no foodservice no Brasil. Vaga PJ, 100% remota.",
-    "link": "https://www.horadoempregodf.com.br/vaga-100-remota-pessoa-executiva-de-canais-pl-a-oportunidade-perfeita-para-quem-ama-parcerias-estrategia-e-resultados/",
+    "titulo": "Analista de Parcerias Estratégicas de Distribuição Internacionais Pleno (vaga exclusiva PcD)",
+    "empresa": "Netvagas",
+    "cidade": "não informado",
+    "modalidade": "",
+    "descricao": "Atuação em parcerias estratégicas de distribuição internacional, vaga exclusiva para pessoas com deficiência.",
+    "link": "https://bebee.com/br/jobs/analista-de-parcerias-estrategicas-de-distribuicao-internacionais-pleno-internacional-vaga-exclusiva--talent-3d975e3b0788",
     "fonte": "busca_br",
-    "data_coleta": "2026-09-23"
+    "data_coleta": "2026-09-29"
+  },
+  {
+    "titulo": "Gerente de Expansão de Canais / Channel Expansion Manager",
+    "empresa": "não divulgada",
+    "cidade": "São Paulo, SP",
+    "modalidade": "",
+    "descricao": "Posição comercial sênior com responsabilidade total pelo desenvolvimento de canais no Brasil — primeira contratação dedicada à distribuição no mercado local, construindo do zero uma rede de parceiros B2B: identificação, qualificação e fechamento de parcerias estratégicas, negociação de acordos de comissão.",
+    "link": "https://br.indeed.com/viewjob?jk=50981b1cb417a128",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-29"
+  },
+  {
+    "titulo": "Coordenador(a) de Desenvolvimento de Distribuidores",
+    "empresa": "Clark Material Handling Brasil",
+    "cidade": "Campinas, SP",
+    "modalidade": "",
+    "descricao": "Prospecção, avaliação e desenvolvimento de novos parceiros de negócio em todo o Brasil para a venda de empilhadeiras e peças de reposição.",
+    "link": "https://br.talent.com/view?id=349b019c42d8",
+    "fonte": "busca_br",
+    "data_coleta": "2026-09-29"
   }
 ]
