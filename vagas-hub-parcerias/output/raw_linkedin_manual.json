@@ -1,92 +1,52 @@
 [
   {
-    "titulo": "Channel Manager",
-    "empresa": "Avalara Brasil",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Desenvolver receita via parceiros em BPO fiscal: plano de negócios, forecast semanal, co-marketing e gestão de pipeline. CV em inglês.",
-    "link": "https://www.linkedin.com/jobs/view/4472768255/",
+    "titulo": "Gerente de Canais e Parcerias",
+    "empresa": "Wake",
+    "cidade": "São Paulo, SP",
+    "modalidade": "Híbrido",
+    "descricao": "Gestão de canais e parcerias na Wake, plataforma de comércio digital.",
+    "link": "https://www.linkedin.com/jobs/view/4468772549/",
     "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
+    "data_coleta": "2026-10-06"
   },
   {
-    "titulo": "Growth Manager - Affiliate Program & Partner Acquisition",
-    "empresa": "Nuvemshop",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Aquisição indireta via afiliados, creators, agências e tech partners para crescer New Payments. Modelos de incentivo e ROI por canal.",
-    "link": "https://www.linkedin.com/jobs/view/4462038992/",
+    "titulo": "Consultor de Vendas de Canais",
+    "empresa": "ConnectPlug (Cplug)",
+    "cidade": "Curitiba, PR",
+    "modalidade": "Presencial",
+    "descricao": "Vendas via canal de parceiros para a ConnectPlug (Cplug).",
+    "link": "https://www.linkedin.com/jobs/view/4474296900/",
     "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
+    "data_coleta": "2026-10-06"
   },
   {
-    "titulo": "Strategic Partnerships Analyst SR",
-    "empresa": "Rentcars",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Gerir e expandir parcerias comerciais, negociar campanhas com parceiros e prospectar parcerias de alta complexidade no Brasil.",
-    "link": "https://www.linkedin.com/jobs/view/4469039731/",
+    "titulo": "Analista de Parcerias Estratégicas",
+    "empresa": "99",
+    "cidade": "São Paulo e Região, SP",
+    "modalidade": "Híbrido",
+    "descricao": "Análise e gestão de parcerias estratégicas na 99 (mobilidade/tecnologia).",
+    "link": "https://www.linkedin.com/jobs/view/4472381316/",
     "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
+    "data_coleta": "2026-10-06"
   },
   {
-    "titulo": "Consultor(a) Partner Marketing Sênior",
-    "empresa": "Deloitte",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Estratégia de partner marketing com hyperscalers (AWS, Google, Azure): eventos, fundos de co-marketing e ROI. Inglês e espanhol avançados.",
-    "link": "https://www.linkedin.com/jobs/view/4440871495/",
+    "titulo": "Analista de Gestão de Parceiros",
+    "empresa": "Culture Designer",
+    "cidade": "Joinville, SC",
+    "modalidade": "Presencial",
+    "descricao": "Gestão de parceiros de negócio na Culture Designer.",
+    "link": "https://www.linkedin.com/jobs/view/4475836122/",
     "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
+    "data_coleta": "2026-10-06"
   },
   {
-    "titulo": "Partner Sales Manager - Dell",
-    "empresa": "Canonical",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Gestão de vendas na aliança com a Dell, levando Ubuntu e o portfólio open source às soluções do OEM.",
-    "link": "https://www.linkedin.com/jobs/view/4434718521/",
+    "titulo": "Especialista de Canal e Parcerias B2B",
+    "empresa": "SRM ASSET",
+    "cidade": "São Paulo, SP",
+    "modalidade": "Presencial",
+    "descricao": "Especialista em canal e parcerias B2B na SRM Asset.",
+    "link": "https://www.linkedin.com/jobs/view/4472841528/",
     "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
-  },
-  {
-    "titulo": "ISV Technical Alliance Manager",
-    "empresa": "Canonical",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Alianças técnicas com ISVs: roadmap conjunto, GTM e enablement. Perfil técnico, até 7 anos de experiência, até 25% de viagens.",
-    "link": "https://www.linkedin.com/jobs/view/4434721414/",
-    "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
-  },
-  {
-    "titulo": "AWS Partner Marketing Manager",
-    "empresa": "Jobgether (empresa parceira)",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Co-marketing e GTM conjunto entre uma plataforma para desenvolvedores e a AWS: campanhas, conteúdo e enablement do time de campo.",
-    "link": "https://www.linkedin.com/jobs/view/4469411849/",
-    "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
-  },
-  {
-    "titulo": "Affiliate Manager",
-    "empresa": "Investing.com",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Programa de afiliados e influenciadores financeiros no Brasil para crescer assinaturas do InvestingPro. CV em inglês.",
-    "link": "https://www.linkedin.com/jobs/view/4470588852/",
-    "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
-  },
-  {
-    "titulo": "Influencer Marketing Manager",
-    "empresa": "Paired (cliente nos EUA)",
-    "cidade": "Brasil",
-    "modalidade": "Remoto",
-    "descricao": "Rede de creators, UGC e afiliados para marca americana de suplementos. Faixa de US$ 30 mil a 48 mil por ano.",
-    "link": "https://www.linkedin.com/jobs/view/4470137645/",
-    "fonte": "linkedin_manual",
-    "data_coleta": "2026-09-29"
+    "data_coleta": "2026-10-06"
   }
 ]
