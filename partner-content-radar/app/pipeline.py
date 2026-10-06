@@ -17,7 +17,7 @@ from sqlmodel import Session, select
 
 from app.config import ANTHROPIC_API_KEY, COMPETITORS
 from app.db import engine
-from app.email_notifier import send_article_email
+from app.email_notifier import send_article_email, send_summary_email
 from app.models import Article
 from app.scraper import discover_posts, fetch_full_article
 from app.translator import translate_and_extract
@@ -35,6 +35,7 @@ def run_scan(
     max_new_posts_per_competitor: int = MAX_NEW_POSTS_PER_COMPETITOR,
     since_days: Optional[int] = None,
     listing_pages: int = 1,
+    notify: str = "individual",
 ) -> list[Article]:
     """Executa uma varredura em todos os concorrentes configurados.
 
@@ -45,6 +46,8 @@ def run_scan(
     - `listing_pages`: quantas páginas de listagem HTML percorrer por
       concorrente quando o RSS não estiver disponível (usado no backfill
       para alcançar posts mais antigos).
+    - `notify`: "individual" (um e-mail por artigo), "summary" (um único
+      e-mail com a lista de todos os artigos novos) ou "none".
     """
     processed: list[Article] = []
     cutoff = datetime.utcnow() - timedelta(days=since_days) if since_days else None
@@ -59,10 +62,24 @@ def run_scan(
                         max_new_posts_per_competitor,
                         cutoff,
                         listing_pages,
+                        notify == "individual",
                     )
                 )
             except Exception:
                 logger.exception("Falha ao varrer %s", competitor["name"])
+
+    if notify == "summary" and processed:
+        try:
+            if send_summary_email(processed):
+                with Session(engine) as session:
+                    for article in processed:
+                        db_article = session.get(Article, article.id)
+                        if db_article:
+                            db_article.email_sent = True
+                            session.add(db_article)
+                    session.commit()
+        except Exception:
+            logger.exception("Falha ao enviar e-mail resumo")
 
     logger.info("Varredura concluída. %d artigo(s) novo(s) processado(s).", len(processed))
     return processed
@@ -74,6 +91,7 @@ def _scan_competitor(
     max_new_posts: int,
     cutoff: Optional[datetime],
     listing_pages: int,
+    send_individual: bool,
 ) -> list[Article]:
     logger.info("Varrendo %s...", competitor["name"])
     discovered = discover_posts(competitor, max_pages=listing_pages)
@@ -101,12 +119,13 @@ def _scan_competitor(
         session.commit()
         session.refresh(article)
 
-        try:
-            article.email_sent = send_article_email(article)
-            session.add(article)
-            session.commit()
-        except Exception:
-            logger.exception("Falha ao enviar e-mail para %s", article.url)
+        if send_individual:
+            try:
+                article.email_sent = send_article_email(article)
+                session.add(article)
+                session.commit()
+            except Exception:
+                logger.exception("Falha ao enviar e-mail para %s", article.url)
 
         new_articles.append(article)
         count += 1

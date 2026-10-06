@@ -293,3 +293,11 @@ relevante.
   ferramenta de scraping com renderização JS (fora do escopo inicial).
 - O script assume que os feeds RSS/URLs configurados continuam válidos —
   revise periodicamente se algum concorrente mudar o layout do blog.
+
+## Desempenho e comportamento no Render (plano gratuito)
+- **Sem "sono"**: o workflow `.github/workflows/keep-alive.yml` (na raiz do repositório) chama `/healthz` a cada 10 min, evitando os ~50 s de espera para acordar.
+- **Varreduras em segundo plano**: os botões respondem na hora e um aviso amarelo mostra o andamento (a página atualiza sozinha).
+- **Listagem leve**: a página não carrega o texto completo dos artigos; há paginação (30 por página) e busca feita no banco.
+- **Banco vazio = recarga automática**: o disco do Render free é efêmero (zera a cada deploy/reinício). Ao iniciar com o banco vazio, o histórico é recarregado sozinho, **sem enviar e-mails** (desligue com `AUTO_SEED=false`).
+- **E-mails**: varredura semanal envia um e-mail por artigo novo; o botão "Buscar histórico" envia **um único e-mail resumo**.
+

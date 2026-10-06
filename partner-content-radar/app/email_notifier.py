@@ -96,3 +96,44 @@ def send_article_email(article: Article) -> bool:
 
     logger.info("E-mail enviado para %s sobre o artigo '%s'.", EMAIL_TO, article.title_pt)
     return True
+
+
+def send_summary_email(articles: list) -> bool:
+    """Envia UM e-mail listando todos os artigos coletados (usado no backfill,
+    para não disparar um e-mail por artigo). Retorna False se o SMTP não
+    estiver configurado."""
+    if not SMTP_USER or not SMTP_PASSWORD:
+        logger.warning("SMTP não configurado — pulando e-mail resumo.")
+        return False
+
+    ordered = sorted(articles, key=lambda a: (a.competitor_name, a.title_pt))
+    rows = "".join(
+        f'<tr><td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;font-size:13px;color:#6B7280;white-space:nowrap;">{a.competitor_name}</td>'
+        f'<td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;font-size:14px;">'
+        f'<a href="{a.url}" style="color:#2563EB;text-decoration:none;">{a.title_pt}</a></td></tr>'
+        for a in ordered
+    )
+    html_body = f"""\
+<!DOCTYPE html>
+<html lang="pt-BR"><body style="font-family:-apple-system,Arial,sans-serif;background:#f4f5f7;padding:24px;margin:0;">
+  <div style="max-width:700px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+    <div style="background:#111827;padding:20px 24px;">
+      <span style="color:#9CA3AF;font-size:12px;letter-spacing:.05em;text-transform:uppercase;">Radar de Conteúdo — Concorrentes</span>
+      <h1 style="color:#fff;font-size:20px;margin:6px 0 0;">{len(ordered)} artigos coletados</h1>
+    </div>
+    <div style="padding:24px;"><table style="width:100%;border-collapse:collapse;">{rows}</table></div>
+  </div>
+</body></html>
+"""
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"[Radar Concorrentes] {len(ordered)} artigos coletados"
+    msg["From"] = EMAIL_FROM
+    msg["To"] = EMAIL_TO
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.sendmail(EMAIL_FROM, [EMAIL_TO], msg.as_string())
+    logger.info("E-mail resumo enviado com %d artigos.", len(ordered))
+    return True

@@ -1,28 +1,33 @@
 """
-Portal web (FastAPI + Jinja2 + Tailwind via CDN) para buscar, filtrar e
-visualizar os artigos traduzidos, organizados por concorrente, com uma aba
-dedicada aos checklists práticos.
+Portal web (FastAPI + Jinja2) para buscar, filtrar e visualizar os artigos
+dos concorrentes, organizados por concorrente, com uma aba dedicada aos
+checklists práticos.
 
-Também registra um agendador interno (APScheduler) que roda a varredura
-automaticamente todo sábado — como alternativa ao cron externo em
-scripts/run_scan.py.
+Varreduras rodam em segundo plano (app/jobs.py): os botões do portal
+respondem na hora. Um agendador interno (APScheduler) dispara a varredura
+semanal aos sábados, e se o banco estiver vazio na inicialização (ex.: após
+um deploy no Render free, cujo disco é efêmero) o histórico é recarregado
+automaticamente, sem enviar e-mails.
 """
 import logging
+import math
 import os
 from contextlib import asynccontextmanager
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from fastapi import FastAPI, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import func, or_
+from sqlalchemy.orm import defer
 from sqlmodel import Session, select
 
-from app.config import BACKFILL_DAYS, COMPETITORS
+from app import jobs
+from app.config import COMPETITORS
 from app.db import engine, init_db
 from app.models import Article
-from app.pipeline import run_scan
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,30 +35,36 @@ logging.basicConfig(
 )
 logger = logging.getLogger("main")
 
-# Caminhos absolutos (baseados na localização deste arquivo), não relativos
-# ao diretório de trabalho do processo — em alguns hosts WSGI (ex.:
-# PythonAnywhere), o cwd não é a raiz do projeto, e caminhos relativos como
-# "app/static" quebram com RuntimeError: Directory does not exist.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PAGE_SIZE = 30
 
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+templates.env.globals["current_job"] = jobs.current_job
 scheduler = BackgroundScheduler()
 
 # Desative com ENABLE_INTERNAL_SCHEDULER=false quando a automação semanal já
-# é feita por um cron/tarefa agendada externa (ex.: PythonAnywhere Scheduled
-# Tasks, GitHub Actions), para não rodar a varredura duas vezes. No Railway,
-# onde o processo web fica sempre ativo, deixe habilitado (padrão).
+# é feita por um cron externo (ex.: GitHub Actions), para não rodar em dobro.
 ENABLE_INTERNAL_SCHEDULER = os.getenv("ENABLE_INTERNAL_SCHEDULER", "true").lower() == "true"
+# Recarrega o histórico sozinho quando o banco está vazio na inicialização.
+AUTO_SEED = os.getenv("AUTO_SEED", "true").lower() == "true"
+
+
+def _count_articles() -> int:
+    with Session(engine) as session:
+        return session.exec(select(func.count()).select_from(Article)).one()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    if AUTO_SEED and _count_articles() == 0:
+        logger.info("Banco vazio — iniciando carga inicial do histórico em segundo plano.")
+        jobs.start_job("seed")
     if ENABLE_INTERNAL_SCHEDULER:
-        # Todo sábado às 08:00 (horário do servidor).
         scheduler.add_job(
-            run_scan,
+            jobs.run_job,
             CronTrigger(day_of_week="sat", hour=8, minute=0),
+            args=["scan"],
             id="weekly_scan",
             replace_existing=True,
         )
@@ -66,29 +77,43 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Radar de Conteúdo de Concorrentes", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
-
-# Chamado também aqui fora do lifespan: em hosts que servem a aplicação via
-# adaptador ASGI->WSGI (ex.: a2wsgi, usado no PythonAnywhere), o evento de
-# lifespan do ASGI nunca é disparado, então init_db() dentro de lifespan()
-# jamais rodaria e as tabelas do banco nunca seriam criadas. Chamar aqui
-# garante que o banco exista de qualquer forma (idempotente).
 init_db()
 
 
-@app.get("/")
-async def home(request: Request, competitor: str = "todos", q: str = ""):
-    with Session(engine) as session:
-        statement = select(Article).order_by(Article.processed_at.desc())
-        articles = session.exec(statement).all()
+@app.get("/healthz")
+async def healthz():
+    """Resposta mínima (sem banco) usada pelo keep-alive para evitar que o serviço durma."""
+    return PlainTextResponse("ok")
 
+
+@app.get("/")
+async def home(request: Request, competitor: str = "todos", q: str = "", page: int = 1):
+    # Não carrega o texto completo dos artigos na listagem — era o que deixava a página lenta.
+    statement = select(Article).options(
+        defer(Article.content_original), defer(Article.content_pt), defer(Article.checklist_md)
+    )
+    count_stmt = select(func.count()).select_from(Article)
+
+    filters = []
     if competitor != "todos":
-        articles = [a for a in articles if a.competitor_slug == competitor]
+        filters.append(Article.competitor_slug == competitor)
     if q:
-        q_lower = q.lower()
-        articles = [
-            a for a in articles
-            if q_lower in a.title_pt.lower() or q_lower in a.content_pt.lower()
-        ]
+        like = f"%{q}%"
+        filters.append(or_(Article.title_pt.ilike(like), Article.content_pt.ilike(like)))
+    for f in filters:
+        statement = statement.where(f)
+        count_stmt = count_stmt.where(f)
+
+    page = max(page, 1)
+    with Session(engine) as session:
+        total = session.exec(count_stmt).one()
+        pages = max(math.ceil(total / PAGE_SIZE), 1)
+        page = min(page, pages)
+        articles = session.exec(
+            statement.order_by(Article.processed_at.desc(), Article.id.desc())
+            .offset((page - 1) * PAGE_SIZE)
+            .limit(PAGE_SIZE)
+        ).all()
 
     return templates.TemplateResponse(
         "index.html",
@@ -98,19 +123,25 @@ async def home(request: Request, competitor: str = "todos", q: str = ""):
             "competitors": COMPETITORS,
             "selected_competitor": competitor,
             "query": q,
+            "page": page,
+            "pages": pages,
+            "total": total,
         },
     )
 
 
 @app.get("/checklists")
 async def checklists(request: Request, competitor: str = "todos"):
-    with Session(engine) as session:
-        statement = select(Article).order_by(Article.processed_at.desc())
-        articles = session.exec(statement).all()
-
+    statement = (
+        select(Article)
+        .options(defer(Article.content_original), defer(Article.content_pt))
+        .where(Article.checklist_md != "")
+    )
     if competitor != "todos":
-        articles = [a for a in articles if a.competitor_slug == competitor]
-    articles = [a for a in articles if a.checklist_md.strip()]
+        statement = statement.where(Article.competitor_slug == competitor)
+
+    with Session(engine) as session:
+        articles = session.exec(statement.order_by(Article.processed_at.desc())).all()
 
     return templates.TemplateResponse(
         "checklists.html",
@@ -133,18 +164,14 @@ async def article_detail(request: Request, article_id: int):
 
 
 @app.post("/rodar-varredura")
-def trigger_scan():
-    """Dispara a varredura manualmente (só posts recentes) a partir do portal web."""
-    run_scan()
+async def trigger_scan():
+    """Dispara a varredura em segundo plano e volta para a página na hora."""
+    jobs.start_job("scan")
     return RedirectResponse(url="/", status_code=303)
 
 
 @app.post("/rodar-backfill")
-def trigger_backfill():
-    """
-    Dispara o backfill histórico (últimos BACKFILL_DAYS dias, com paginação
-    da listagem HTML) a partir do portal web. Pode demorar mais que a
-    varredura normal, pois percorre várias páginas por concorrente.
-    """
-    run_scan(max_new_posts_per_competitor=100, since_days=BACKFILL_DAYS, listing_pages=25)
+async def trigger_backfill():
+    """Dispara a busca de histórico em segundo plano e volta para a página na hora."""
+    jobs.start_job("backfill")
     return RedirectResponse(url="/", status_code=303)

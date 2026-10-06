@@ -15,7 +15,9 @@
 </div>
 
 {% if not articles %}
-<p class="text-gray-500 text-sm">Nenhum artigo processado ainda. Clique em "Rodar varredura agora" para buscar posts novos.</p>
+<p class="text-gray-500 text-sm">Nenhum artigo por aqui ainda. Se acabou de atualizar o serviço, o histórico é recarregado sozinho em alguns minutos; ou clique em "Rodar varredura agora".</p>
+{% else %}
+<p class="text-xs text-gray-500 mb-3">{{ total }} artigo(s) — página {{ page }} de {{ pages }}</p>
 {% endif %}
 
 <div class="grid gap-4">
@@ -33,4 +35,15 @@
   </div>
   {% endfor %}
 </div>
+
+{% if pages > 1 %}
+<div class="flex items-center justify-between mt-6 text-sm">
+  {% if page > 1 %}
+  <a class="px-3 py-1.5 border border-gray-300 rounded bg-white hover:bg-gray-50" href="/?competitor={{ selected_competitor }}&q={{ query|urlencode }}&page={{ page - 1 }}">← Anteriores</a>
+  {% else %}<span></span>{% endif %}
+  {% if page < pages %}
+  <a class="px-3 py-1.5 border border-gray-300 rounded bg-white hover:bg-gray-50" href="/?competitor={{ selected_competitor }}&q={{ query|urlencode }}&page={{ page + 1 }}">Próximos →</a>
+  {% endif %}
+</div>
+{% endif %}
 {% endblock %}

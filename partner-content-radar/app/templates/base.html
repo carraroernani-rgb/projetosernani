@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if current_job() %}<meta http-equiv="refresh" content="8">{% endif %}
   <title>{% block title %}Radar de Conteúdo de Concorrentes{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -36,6 +37,14 @@
       </div>
     </div>
   </nav>
+  {% set job = current_job() %}
+  {% if job %}
+  <div class="bg-yellow-50 border-b border-yellow-200 text-yellow-900 text-sm">
+    <div class="max-w-6xl mx-auto px-4 py-2">
+      ⏳ {{ job.label }} em andamento em segundo plano — os artigos vão aparecendo aqui (a página atualiza sozinha a cada 8 s).
+    </div>
+  </div>
+  {% endif %}
   <main class="max-w-6xl mx-auto px-4 py-6">
     {% block content %}{% endblock %}
   </main>
