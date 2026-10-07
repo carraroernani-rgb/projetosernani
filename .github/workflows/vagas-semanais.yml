@@ -1,0 +1,36 @@
+name: Vagas Semanais
+on:
+  schedule:
+    - cron: '0 11 * * 1'  # segunda 8h BRT (UTC+3)
+  workflow_dispatch: {}
+jobs:
+  buscar-vagas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Rodar Greenhouse/Lever
+        working-directory: vagas-hub-parcerias
+        run: python3 scripts/fetch_greenhouse.py
+      - name: Rodar Claude Code (boards BR)
+        working-directory: vagas-hub-parcerias
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude -p "$(cat scripts/fetch_br_boards.md)" --dangerously-skip-permissions
+      - name: Deduplicar e exportar
+        working-directory: vagas-hub-parcerias
+        run: |
+          python3 scripts/dedupe_normalize.py
+          python3 scripts/export.py
+      - name: Commitar resultado
+        working-directory: vagas-hub-parcerias
+        run: |
+          git config user.email "bot@hubdeparcerias.com.br"
+          git config user.name "Vagas Bot"
+          git add output/
+          git commit -m "Vagas da semana $(date +%Y-%m-%d)" || echo "nada novo"
+          git push
